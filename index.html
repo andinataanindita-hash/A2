@@ -1,162 +1,467 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#171513" />
-  <meta name="description" content="A2 Kenangan Bersama Selamanya — album foto dan cerita Andinata Anindita." />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#171513">
+  <meta name="description" content="A2 Kenangan Bersama Selamanya — album foto dan cerita Andinata Anindita.">
+
   <title>A2 Kenangan Bersama Selamanya | Andinata Anindita</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./style.css?v=2">
+
+  <!-- Memprioritaskan gambar sampul -->
+  <link rel="preload" as="image" href="./assets/hero-sunset.jpg">
+
+  <!-- Library pembaca Word DOCX -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.13.0/mammoth.browser.min.js" defer></script>
-  <script src="script.js" defer></script>
+
+  <!-- JavaScript -->
+  <script src="./script.js?v=2" defer></script>
 </head>
+
 <body>
+
   <div class="page-grain" aria-hidden="true"></div>
 
+  <!-- ================= HEADER ================= -->
+
   <header class="site-header" id="home">
-    <a class="brand" href="#home" aria-label="A2 Kenangan, kembali ke beranda">
+
+    <a class="brand" href="#home">
       <span class="brand-mark">A<span>2</span></span>
       <span class="brand-name">A2 <em>Kenangan</em></span>
     </a>
 
-    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Buka menu" aria-expanded="false">
-      <span></span><span></span>
+    <button
+      class="menu-toggle"
+      id="menuToggle"
+      type="button"
+      aria-label="Buka menu"
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
     </button>
 
-    <nav class="main-nav" id="mainNav" aria-label="Navigasi utama">
+    <nav class="main-nav" id="mainNav">
       <a class="nav-link active" href="#home">Beranda</a>
       <a class="nav-link" href="#album">Album</a>
       <a class="nav-link" href="#cerita">Cerita</a>
     </nav>
 
-    <a class="header-heart" href="#pesan" aria-label="Lihat pesan penutup">♡</a>
+    <a class="header-heart" href="#pesan">♡</a>
+
   </header>
 
+
   <main>
+
+    <!-- ================= HERO / BACKGROUND ================= -->
+
     <section class="hero" aria-labelledby="heroTitle">
+
+      <!-- GAMBAR BACKGROUND UTAMA -->
+      <img
+        class="hero-background"
+        src="./assets/hero-sunset.jpg"
+        alt=""
+        aria-hidden="true"
+        fetchpriority="high"
+      >
+
+      <!-- Overlay gelap -->
+      <div class="hero-overlay" aria-hidden="true"></div>
+
+      <!-- Konten utama -->
       <div class="hero-content">
-        <span class="hero-emblem" aria-hidden="true">♡</span>
-        <p class="eyebrow"><span></span> SEBUAH ALBUM KECIL <span></span></p>
+
+        <span class="hero-emblem">♡</span>
+
+        <p class="eyebrow">
+          <span></span>
+          SEBUAH ALBUM KECIL
+          <span></span>
+        </p>
+
         <h1 id="heroTitle">A2 Kenangan</h1>
-        <p class="hero-subtitle">Bersama Selamanya</p>
+
+        <p class="hero-subtitle">
+          Bersama Selamanya
+        </p>
+
         <div class="name-line">
           <span></span>
-          <p>Andinata <b>♡</b> Anindita</p>
+
+          <p>
+            Andinata <b>♡</b> Anindita
+          </p>
+
           <span></span>
         </div>
-        <a class="outline-button" href="#album"><span class="button-picture" aria-hidden="true">▧</span> Lihat Album <span aria-hidden="true">→</span></a>
-        <p class="hero-quote">“Terima kasih telah menjadi bagian<br />terindah dalam hidupku.” <span>♡</span></p>
+
+        <a class="outline-button" href="#album">
+          <span class="button-picture">▧</span>
+          Lihat Album
+          <span>→</span>
+        </a>
+
+        <p class="hero-quote">
+          “Terima kasih telah menjadi bagian
+          <br>
+          terindah dalam hidupku.”
+          <span>♡</span>
+        </p>
+
       </div>
-      <a class="scroll-cue" href="#album" aria-label="Gulir ke album"><span></span> GULIR PERLAHAN <b>↓</b></a>
+
+      <a class="scroll-cue" href="#album">
+        <span></span>
+        GULIR PERLAHAN
+        <b>↓</b>
+      </a>
+
     </section>
 
-    <section class="album-section section-shell" id="album" aria-labelledby="albumTitle">
+
+    <!-- ================= GALLERY ================= -->
+
+    <section class="album-section section-shell" id="album">
+
       <div class="section-heading">
-        <p class="eyebrow"><span></span> MEMORY COLLECTION <span></span></p>
-        <h2 id="albumTitle">Galeri <i>Kenangan</i></h2>
-        <p>Setiap foto punya cerita kecilnya sendiri.</p>
+
+        <p class="eyebrow">
+          <span></span>
+          MEMORY COLLECTION
+          <span></span>
+        </p>
+
+        <h2>
+          Galeri <i>Kenangan</i>
+        </h2>
+
+        <p>
+          Setiap foto punya cerita kecilnya sendiri.
+        </p>
+
       </div>
 
+
+      <!-- Filter dan pencarian -->
+
       <div class="gallery-toolbar">
-        <div class="filter-list" role="group" aria-label="Filter kategori foto">
-          <button class="filter-button active" type="button" data-filter="all">Semua</button>
-          <button class="filter-button" type="button" data-filter="kebersamaan">Kebersamaan</button>
-          <button class="filter-button" type="button" data-filter="perjalanan">Perjalanan</button>
-          <button class="filter-button" type="button" data-filter="sederhana">Momen sederhana</button>
+
+        <div class="filter-list">
+
+          <button class="filter-button active" data-filter="all" type="button">
+            Semua
+          </button>
+
+          <button class="filter-button" data-filter="kebersamaan" type="button">
+            Kebersamaan
+          </button>
+
+          <button class="filter-button" data-filter="perjalanan" type="button">
+            Perjalanan
+          </button>
+
+          <button class="filter-button" data-filter="sederhana" type="button">
+            Momen sederhana
+          </button>
+
         </div>
 
         <label class="search-box">
-          <span aria-hidden="true">⌕</span>
-          <input id="searchInput" type="search" placeholder="Cari kenangan..." autocomplete="off" />
+          <span>⌕</span>
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Cari kenangan..."
+          >
         </label>
+
       </div>
 
-      <div class="gallery-grid" id="galleryGrid" aria-live="polite"></div>
-      <p class="empty-state" id="emptyState" hidden>Belum ada foto yang cocok. Coba kata kunci atau kategori lain.</p>
+
+      <!-- Galeri otomatis dari JavaScript -->
+
+      <div class="gallery-grid" id="galleryGrid"></div>
+
+      <p class="empty-state" id="emptyState" hidden>
+        Belum ada foto yang cocok.
+      </p>
+
 
       <div class="gallery-bottom">
-        <p><span id="photoCount">0</span> kenangan tersimpan di halaman ini</p>
+
+        <p>
+          <span id="photoCount">0</span>
+          kenangan tersimpan di halaman ini
+        </p>
+
         <label class="upload-button" for="photoUpload">
-          <span aria-hidden="true">＋</span> Tambahkan foto
+          ＋ Tambahkan foto
         </label>
-        <input id="photoUpload" type="file" accept="image/*" multiple hidden />
+
+        <input
+          id="photoUpload"
+          type="file"
+          accept="image/*"
+          multiple
+          hidden
+        >
+
       </div>
-      <p class="upload-note" id="uploadNote">Foto yang diunggah dari tombol ini hanya menjadi pratinjau sementara. Untuk menampilkannya kepada semua pengunjung, masukkan file foto ke folder <code>assets</code> di GitHub.</p>
+
+      <p class="upload-note" id="uploadNote">
+        Foto yang diunggah hanya menjadi pratinjau sementara.
+        Untuk menampilkannya kepada semua pengunjung,
+        masukkan foto ke folder assets di GitHub.
+      </p>
+
     </section>
 
-    <section class="stories-section section-shell" id="cerita" aria-labelledby="storiesTitle">
+
+    <!-- ================= CERITA ================= -->
+
+    <section class="stories-section section-shell" id="cerita">
+
       <div class="section-heading">
-        <p class="eyebrow"><span></span> OUR LITTLE STORIES <span></span></p>
-        <h2 id="storiesTitle">Cerita yang ingin <i>disimpan</i></h2>
-        <p>Unggah tulisan kalian, lalu baca kembali kapan pun ingin mengenangnya.</p>
+
+        <p class="eyebrow">
+          <span></span>
+          OUR LITTLE STORIES
+          <span></span>
+        </p>
+
+        <h2>
+          Cerita yang ingin <i>disimpan</i>
+        </h2>
+
+        <p>
+          Unggah tulisan kalian, lalu baca kembali kapan pun
+          ingin mengenangnya.
+        </p>
+
       </div>
+
+
+      <!-- Upload cerita -->
 
       <div class="story-upload-panel">
-        <div class="story-upload-symbol" aria-hidden="true">Aa</div>
-        <div class="story-upload-content">
-          <h3>Tambahkan cerita baru</h3>
-          <p>Pilih tulisan dari perangkat dalam format <strong>.txt</strong> atau <strong>.docx</strong>. Isi file akan ditampilkan langsung di album ini.</p>
-          <label class="story-title-label" for="storyTitleInput">Judul cerita <span>(opsional)</span></label>
-          <input class="story-title-input" id="storyTitleInput" type="text" maxlength="90" placeholder="Contoh: Hari pertama kita bertemu" />
-          <div class="story-upload-actions">
-            <label class="upload-button story-file-button" for="storyFileInput"><span aria-hidden="true">＋</span> Pilih file cerita</label>
-            <input id="storyFileInput" type="file" accept=".txt,.docx,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden />
-            <span class="file-size-note">Maksimal 5 MB · TXT / DOCX</span>
-          </div>
-          <p class="story-status" id="storyStatus" role="status" aria-live="polite">Cerita yang ditambahkan tersimpan di browser dan perangkat ini.</p>
+
+        <div class="story-upload-symbol">
+          Aa
         </div>
+
+        <div class="story-upload-content">
+
+          <h3>Tambahkan cerita baru</h3>
+
+          <p>
+            Pilih tulisan dari perangkat dalam format
+            <strong>.txt</strong> atau <strong>.docx</strong>.
+            Isi file akan ditampilkan langsung di album ini.
+          </p>
+
+          <label class="story-title-label" for="storyTitleInput">
+            Judul cerita <span>(opsional)</span>
+          </label>
+
+          <input
+            class="story-title-input"
+            id="storyTitleInput"
+            type="text"
+            maxlength="90"
+            placeholder="Contoh: Hari pertama kita bertemu"
+          >
+
+          <div class="story-upload-actions">
+
+            <label
+              class="upload-button story-file-button"
+              for="storyFileInput"
+            >
+              ＋ Pilih file cerita
+            </label>
+
+            <input
+              id="storyFileInput"
+              type="file"
+              accept=".txt,.docx,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              hidden
+            >
+
+            <span class="file-size-note">
+              Maksimal 5 MB · TXT / DOCX
+            </span>
+
+          </div>
+
+          <p class="story-status" id="storyStatus" role="status">
+            Cerita yang ditambahkan tersimpan di browser dan perangkat ini.
+          </p>
+
+        </div>
+
       </div>
+
+
+      <!-- Daftar cerita -->
 
       <div class="stories-list-heading">
+
         <h3>Arsip cerita</h3>
+
         <span id="storyCount">0 cerita</span>
+
       </div>
-      <div class="stories-grid" id="storiesGrid" aria-live="polite"></div>
-      <p class="empty-state stories-empty" id="emptyStories">Belum ada cerita yang diunggah. Mulai dengan menambahkan satu tulisan.</p>
-      <p class="story-storage-note"><span aria-hidden="true">ⓘ</span> Cerita disimpan di penyimpanan browser pada perangkat ini, bukan di server GitHub. Pengunjung lain tidak otomatis melihat cerita yang kamu unggah. Gunakan tombol unduh untuk menyimpan salinan file.</p>
+
+      <div class="stories-grid" id="storiesGrid"></div>
+
+      <p class="empty-state stories-empty" id="emptyStories">
+        Belum ada cerita yang diunggah.
+        Mulai dengan menambahkan satu tulisan.
+      </p>
+
+      <p class="story-storage-note">
+        ⓘ Cerita disimpan di penyimpanan browser pada perangkat ini,
+        bukan di server GitHub.
+      </p>
+
     </section>
+
+
+    <!-- ================= CLOSING ================= -->
 
     <section class="closing-section" id="pesan">
+
       <div class="closing-inner">
+
         <span class="closing-symbol">♡</span>
-        <p class="eyebrow">A SMALL PLACE FOR OUR MEMORIES</p>
-        <h2>Untuk setiap cerita<br /><i>yang pernah tercipta.</i></h2>
-        <p class="closing-names">Andinata <span>×</span> Anindita</p>
+
+        <p class="eyebrow">
+          A SMALL PLACE FOR OUR MEMORIES
+        </p>
+
+        <h2>
+          Untuk setiap cerita
+          <br>
+          <i>yang pernah tercipta.</i>
+        </h2>
+
+        <p class="closing-names">
+          Andinata <span>×</span> Anindita
+        </p>
+
       </div>
+
     </section>
+
   </main>
 
+
+  <!-- ================= FOOTER ================= -->
+
   <footer class="site-footer">
-    <a class="footer-brand" href="#home">A2 <span>KENANGAN</span></a>
-    <p>Dibuat untuk menyimpan momen yang berarti.</p>
-    <p class="copyright">© <span id="currentYear"></span> A2 Kenangan</p>
+
+    <a class="footer-brand" href="#home">
+      A2 <span>KENANGAN</span>
+    </a>
+
+    <p>
+      Dibuat untuk menyimpan momen yang berarti.
+    </p>
+
+    <p class="copyright">
+      © <span id="currentYear"></span> A2 Kenangan
+    </p>
+
   </footer>
 
-  <dialog class="photo-modal" id="photoModal" aria-label="Pratinjau foto">
-    <button class="modal-close" id="modalClose" type="button" aria-label="Tutup foto">×</button>
-    <div class="modal-image-wrap"><img id="modalImage" src="" alt="" /></div>
-    <div class="modal-caption">
-      <p class="modal-category" id="modalCategory"></p>
-      <h3 id="modalTitle"></h3>
-      <p id="modalDescription"></p>
+
+  <!-- ================= PHOTO MODAL ================= -->
+
+  <dialog class="photo-modal" id="photoModal">
+
+    <button
+      class="modal-close"
+      id="modalClose"
+      type="button"
+      aria-label="Tutup foto"
+    >
+      ×
+    </button>
+
+    <div class="modal-image-wrap">
+      <img id="modalImage" src="" alt="">
     </div>
+
+    <div class="modal-caption">
+
+      <p class="modal-category" id="modalCategory"></p>
+
+      <h3 id="modalTitle"></h3>
+
+      <p id="modalDescription"></p>
+
+    </div>
+
   </dialog>
 
-  <dialog class="story-modal" id="storyModal" aria-labelledby="storyModalTitle">
+
+  <!-- ================= STORY MODAL ================= -->
+
+  <dialog class="story-modal" id="storyModal">
+
     <div class="story-modal-inner">
-      <button class="modal-close story-modal-close" id="storyModalClose" type="button" aria-label="Tutup cerita">×</button>
+
+      <button
+        class="modal-close story-modal-close"
+        id="storyModalClose"
+        type="button"
+        aria-label="Tutup cerita"
+      >
+        ×
+      </button>
+
       <p class="modal-category" id="storyModalDate"></p>
+
       <h3 id="storyModalTitle"></h3>
+
       <div class="story-reader" id="storyReader"></div>
+
       <div class="story-modal-actions">
-        <button class="upload-button" id="storyDownloadButton" type="button">↓ Unduh file asli</button>
-        <button class="text-button danger-button" id="storyDeleteButton" type="button">Hapus cerita</button>
+
+        <button
+          class="upload-button"
+          id="storyDownloadButton"
+          type="button"
+        >
+          ↓ Unduh file asli
+        </button>
+
+        <button
+          class="text-button danger-button"
+          id="storyDeleteButton"
+          type="button"
+        >
+          Hapus cerita
+        </button>
+
       </div>
+
     </div>
+
   </dialog>
+
 </body>
 </html>
