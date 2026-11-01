@@ -49,6 +49,7 @@ let cloudPhotos = [];
 let supabaseClient = null;
 let currentUser = null;
 let selectedPhoto = null;
+const deletingPhotoIds = new Set();
 
 /* ==========================================================
    2. FUNGSI KEAMANAN TEKS HTML
@@ -171,6 +172,24 @@ function createCloudControls() {
       padding:7px 10px;
       border-radius:7px;
       cursor:pointer;
+      transition:background .2s ease, border-color .2s ease, opacity .2s ease;
+    }
+
+    .cloud-photo-actions button[data-photo-action="delete"] {
+      color:#ffd1c9;
+      background:rgba(150,55,48,.16);
+      border:1px solid rgba(226,125,112,.55);
+    }
+
+    .cloud-photo-actions button[data-photo-action="delete"]:hover:not(:disabled) {
+      color:#fff;
+      background:rgba(160,55,48,.42);
+      border-color:#e58c80;
+    }
+
+    .cloud-photo-actions button:disabled {
+      cursor:wait;
+      opacity:.55;
     }
 
     #cloudPhotoControls input {
@@ -387,7 +406,7 @@ async function loadCloudPhotos() {
       true
     );
 
-    return;
+    return false;
   }
 
   cloudPhotos = (data || []).map((row) => {
@@ -413,6 +432,7 @@ async function loadCloudPhotos() {
   });
 
   renderGallery();
+  return true;
 
 }
 
@@ -509,8 +529,10 @@ function renderGallery() {
               type="button"
               data-photo-action="delete"
               data-photo-id="${escapeHTML(photo.id)}"
+              aria-label="Hapus foto ${escapeHTML(photo.title)}"
+              ${deletingPhotoIds.has(String(photo.id)) ? "disabled" : ""}
             >
-              Hapus
+              ${deletingPhotoIds.has(String(photo.id)) ? "Menghapus…" : "Hapus foto"}
             </button>
 
           </div>
@@ -778,45 +800,144 @@ async function deleteCloudPhoto(id) {
     (item) => String(item.id) === String(id)
   );
 
-  if (!photo || !currentUser) return;
-
-  if (!confirm(`Yakin ingin menghapus foto "${photo.title}"?`)) {
+  if (!photo || !currentUser || !supabaseClient) {
+    setCloudStatus("Masuk sebagai pemilik untuk menghapus foto.", true);
     return;
   }
 
-  const { error: rowError } =
-    await supabaseClient
-      .from(SUPABASE_TABLE)
-      .delete()
-      .eq("id", photo.id);
+  const photoId = String(photo.id);
+  if (deletingPhotoIds.has(photoId)) return;
 
-  if (rowError) {
+  const confirmed = window.confirm(
+    `Yakin ingin menghapus foto "${photo.title}"?\n\nFoto akan dihapus dari galeri dan Supabase Storage.`
+  );
 
-    return setCloudStatus(
-      `Gagal menghapus data foto: ${rowError.message}`,
-      true
-    );
+  if (!confirmed) return;
 
-  }
+  deletingPhotoIds.add(photoId);
+  renderGallery();
+  setCloudStatus(`Menyiapkan penghapusan "${photo.title}"…`);
 
-  const { error: fileError } =
-    await supabaseClient.storage
-      .from(SUPABASE_BUCKET)
-      .remove([photo.image_path]);
+  let backupBlob = null;
+  let storageFileRemoved = false;
 
-  await loadCloudPhotos();
+  try {
 
-  if (fileError) {
+    // Simpan salinan sementara agar file bisa dipulihkan jika penghapusan
+    // baris database gagal setelah file Storage terhapus.
+    const { data: backupData, error: backupError } =
+      await supabaseClient.storage
+        .from(SUPABASE_BUCKET)
+        .download(photo.image_path);
 
-    setCloudStatus(
-      `Data terhapus, tetapi file Storage gagal dihapus: ${fileError.message}`,
-      true
-    );
+    if (backupError) {
+      throw new Error(
+        `Tidak dapat membaca file sebelum dihapus: ${backupError.message}`
+      );
+    }
 
-  } else {
+    backupBlob = backupData;
 
-    setCloudStatus("Foto berhasil dihapus dari album.");
+    // Hapus file melalui Storage API (bukan menghapus storage.objects via SQL).
+    const { error: fileError } =
+      await supabaseClient.storage
+        .from(SUPABASE_BUCKET)
+        .remove([photo.image_path]);
 
+    if (fileError) {
+      throw new Error(
+        `File Storage gagal dihapus: ${fileError.message}`
+      );
+    }
+
+    storageFileRemoved = true;
+
+    // Hapus metadata dan minta ID yang terhapus untuk memastikan RLS
+    // benar-benar mengizinkan operasi ini.
+    const { data: deletedRows, error: rowError } =
+      await supabaseClient
+        .from(SUPABASE_TABLE)
+        .delete()
+        .eq("id", photo.id)
+        .select("id");
+
+    if (rowError || !deletedRows?.length) {
+
+      // Kompensasi: pulihkan file jika metadata tidak berhasil dihapus.
+      const { error: restoreError } =
+        await supabaseClient.storage
+          .from(SUPABASE_BUCKET)
+          .upload(photo.image_path, backupBlob, {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: backupBlob?.type || "application/octet-stream"
+          });
+
+      storageFileRemoved = Boolean(restoreError);
+
+      if (restoreError) {
+        throw new Error(
+          `Metadata gagal dihapus (${rowError?.message || "tidak ada baris yang terhapus"}). File juga gagal dipulihkan (${restoreError.message}). Periksa bucket Storage secara manual.`
+        );
+      }
+
+      throw new Error(
+        `Metadata foto tidak berhasil dihapus: ${rowError?.message || "baris tidak ditemukan atau ditolak oleh kebijakan RLS"}. File foto sudah dipulihkan.`
+      );
+    }
+
+    // Kedua penghapusan sudah berhasil. Jangan pulihkan file jika refresh UI
+    // setelah ini gagal, karena baris database sudah benar-benar terhapus.
+    storageFileRemoved = false;
+
+    if (selectedPhoto && String(selectedPhoto.id) === photoId) {
+      if (photoModal?.open) photoModal.close();
+      selectedPhoto = null;
+    }
+
+    // Hapus dari state lokal lebih dulu agar kartu tidak tertinggal bila
+    // permintaan refresh berikutnya gagal.
+    cloudPhotos = cloudPhotos.filter((item) => String(item.id) !== photoId);
+    const refreshed = await loadCloudPhotos();
+
+    if (refreshed) {
+      setCloudStatus("Foto berhasil dihapus dari galeri, tabel database, dan Supabase Storage.");
+    } else {
+      setCloudStatus("Foto sudah terhapus dari database dan Storage, tetapi galeri gagal dimuat ulang. Muat ulang halaman.", true);
+    }
+
+  } catch (error) {
+
+    // Jika terjadi kegagalan tak terduga setelah Storage terhapus, coba pulihkan
+    // file agar data album tidak menunjuk ke file yang sudah hilang.
+    if (storageFileRemoved && backupBlob) {
+      const { error: restoreError } =
+        await supabaseClient.storage
+          .from(SUPABASE_BUCKET)
+          .upload(photo.image_path, backupBlob, {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: backupBlob.type || "application/octet-stream"
+          });
+
+      await loadCloudPhotos();
+
+      if (restoreError) {
+        setCloudStatus(
+          `${error.message}. Pemulihan file juga gagal: ${restoreError.message}. Periksa Supabase Storage.`,
+          true
+        );
+      } else {
+        setCloudStatus(`${error.message}. File foto berhasil dipulihkan.`, true);
+      }
+    } else {
+      await loadCloudPhotos();
+      setCloudStatus(error.message || "Terjadi kesalahan saat menghapus foto.", true);
+    }
+
+  } finally {
+    deletingPhotoIds.delete(photoId);
+    renderGallery();
   }
 
 }
