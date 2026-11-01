@@ -1,4 +1,3 @@
-
 /* ==========================================================
    A2 KENANGAN — GALERI FOTO CLOUD + ARSIP CERITA
    Foto: Supabase Storage + tabel photos.
@@ -15,14 +14,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_ypSzmYyCIflppu_mtMUeLQ_kDTjIkzn";
 const SUPABASE_BUCKET = "album-foto";
 const SUPABASE_TABLE = "photos";
 
-const photos = [
-  { id: 1, title: "Senja yang tenang", category: "perjalanan", categoryLabel: "Perjalanan", description: "Ganti ilustrasi ini dengan foto senja atau perjalanan kalian.", src: "assets/foto-01.jpg", alt: "Ilustrasi langit senja sebagai foto contoh" },
-  { id: 2, title: "Momen sederhana", category: "sederhana", categoryLabel: "Momen sederhana", description: "Hal kecil yang tetap menyenangkan untuk diingat.", src: "assets/foto-02.jpg", alt: "Ilustrasi bunga sebagai foto contoh" },
-  { id: 3, title: "Waktu bersama", category: "kebersamaan", categoryLabel: "Kebersamaan", description: "Simpan foto favorit kalian di bagian ini.", src: "assets/foto-03.jpg", alt: "Ilustrasi dua siluet sebagai foto contoh" },
-  { id: 4, title: "Cerita di sore hari", category: "perjalanan", categoryLabel: "Perjalanan", description: "Satu tempat, satu waktu, dan cerita yang berbeda.", src: "assets/foto-04.jpg", alt: "Ilustrasi pemandangan sebagai foto contoh" },
-  { id: 5, title: "Senyum hari itu", category: "kebersamaan", categoryLabel: "Kebersamaan", description: "Ubah gambar contoh ini dengan foto kalian sendiri.", src: "assets/foto-05.jpg", alt: "Ilustrasi bentuk hati sebagai foto contoh" },
-  { id: 6, title: "Hari yang istimewa", category: "sederhana", categoryLabel: "Momen sederhana", description: "Tambahkan tanggal atau cerita singkat sesuai momen aslinya.", src: "assets/foto-06.jpg", alt: "Ilustrasi langit malam sebagai foto contoh" }
-];
+// Galeri hanya menampilkan foto yang benar-benar tersimpan di Supabase.
 
 /* ==========================================================
    1. ELEMENT HTML
@@ -442,7 +434,7 @@ async function loadCloudPhotos() {
 
 function getVisiblePhotos() {
 
-  return [...cloudPhotos, ...photos].filter((photo) => {
+  return cloudPhotos.filter((photo) => {
 
     const matchesFilter =
       activeFilter === "all" ||
@@ -548,13 +540,13 @@ function renderGallery() {
   emptyState.hidden = visible.length > 0;
 
   photoCount.textContent =
-    String(cloudPhotos.length + photos.length);
+    String(cloudPhotos.length);
 
   galleryGrid.querySelectorAll(".photo-card").forEach((card) => {
 
     const open = () => {
 
-      const photo = [...cloudPhotos, ...photos].find(
+      const photo = cloudPhotos.find(
         (item) => String(item.id) === card.dataset.photoId
       );
 
