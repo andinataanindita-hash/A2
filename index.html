@@ -16,16 +16,25 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="./style.css?v=2">
+  <link rel="stylesheet" href="./style.css?v=3">
 
   <!-- Memprioritaskan gambar sampul -->
   <link rel="preload" as="image" href="./assets/hero-sunset.jpg">
 
   <!-- Library pembaca Word DOCX -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.13.0/mammoth.browser.min.js" defer></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.13.0/mammoth.browser.min.js"
+    defer
+  ></script>
 
-  <!-- JavaScript -->
-  <script src="./script.js?v=2" defer></script>
+  <!-- Library Supabase -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    defer
+  ></script>
+
+  <!-- JavaScript utama -->
+  <script src="./script.js?v=3" defer></script>
 </head>
 
 <body>
@@ -69,7 +78,6 @@
 
     <section class="hero" aria-labelledby="heroTitle">
 
-      <!-- GAMBAR BACKGROUND UTAMA -->
       <img
         class="hero-background"
         src="./assets/hero-sunset.jpg"
@@ -78,10 +86,8 @@
         fetchpriority="high"
       >
 
-      <!-- Overlay gelap -->
       <div class="hero-overlay" aria-hidden="true"></div>
 
-      <!-- Konten utama -->
       <div class="hero-content">
 
         <span class="hero-emblem">♡</span>
@@ -161,19 +167,35 @@
 
         <div class="filter-list">
 
-          <button class="filter-button active" data-filter="all" type="button">
+          <button
+            class="filter-button active"
+            data-filter="all"
+            type="button"
+          >
             Semua
           </button>
 
-          <button class="filter-button" data-filter="kebersamaan" type="button">
+          <button
+            class="filter-button"
+            data-filter="kebersamaan"
+            type="button"
+          >
             Kebersamaan
           </button>
 
-          <button class="filter-button" data-filter="perjalanan" type="button">
+          <button
+            class="filter-button"
+            data-filter="perjalanan"
+            type="button"
+          >
             Perjalanan
           </button>
 
-          <button class="filter-button" data-filter="sederhana" type="button">
+          <button
+            class="filter-button"
+            data-filter="sederhana"
+            type="button"
+          >
             Momen sederhana
           </button>
 
@@ -181,6 +203,7 @@
 
         <label class="search-box">
           <span>⌕</span>
+
           <input
             id="searchInput"
             type="search"
@@ -199,6 +222,8 @@
         Belum ada foto yang cocok.
       </p>
 
+
+      <!-- Informasi dan tombol unggah -->
 
       <div class="gallery-bottom">
 
@@ -222,9 +247,8 @@
       </div>
 
       <p class="upload-note" id="uploadNote">
-        Foto yang diunggah hanya menjadi pratinjau sementara.
-        Untuk menampilkannya kepada semua pengunjung,
-        masukkan foto ke folder assets di GitHub.
+        Foto yang diunggah akan disimpan di cloud dan dapat dilihat
+        oleh pengunjung dari berbagai perangkat.
       </p>
 
     </section>
@@ -307,7 +331,8 @@
           </div>
 
           <p class="story-status" id="storyStatus" role="status">
-            Cerita yang ditambahkan tersimpan di browser dan perangkat ini.
+            Cerita TXT akan disimpan di cloud setelah kamu masuk
+            sebagai pemilik. Dokumen DOCX disimpan secara lokal.
           </p>
 
         </div>
@@ -333,8 +358,8 @@
       </p>
 
       <p class="story-storage-note">
-        ⓘ Cerita disimpan di penyimpanan browser pada perangkat ini,
-        bukan di server GitHub.
+        ⓘ Cerita TXT disimpan di cloud, sedangkan dokumen DOCX
+        disimpan secara lokal di perangkat ini.
       </p>
 
     </section>
